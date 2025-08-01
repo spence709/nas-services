@@ -20,52 +20,116 @@ import {
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
 
   const services = [
     {
       icon: <Code className="h-8 w-8" />,
       title: "Custom Apps",
       description: "Native and web applications tailored to your needs",
+      features: [
+        "iOS & Android Apps",
+        "Cross-platform Development",
+        "API Integration",
+        "App Store Deployment",
+      ],
+      price: "Starting at $15,000",
     },
     {
       icon: <Globe className="h-8 w-8" />,
       title: "Custom Websites",
       description: "Responsive, modern websites that convert visitors",
+      features: [
+        "Responsive Design",
+        "SEO Optimization",
+        "CMS Integration",
+        "Performance Optimization",
+      ],
+      price: "Starting at $5,000",
     },
     {
       icon: <Database className="h-8 w-8" />,
       title: "Software Platforms",
       description: "Scalable platforms with robust architecture",
+      features: [
+        "Cloud Infrastructure",
+        "Microservices",
+        "Database Design",
+        "Auto-scaling",
+      ],
+      price: "Starting at $25,000",
     },
     {
       icon: <BarChart className="h-8 w-8" />,
       title: "Dashboards",
       description: "Data visualization and analytics dashboards",
+      features: [
+        "Real-time Analytics",
+        "Custom Charts",
+        "Data Integration",
+        "Export Features",
+      ],
+      price: "Starting at $8,000",
     },
     {
       icon: <Zap className="h-8 w-8" />,
       title: "Web3 Integration",
       description: "Blockchain and cryptocurrency solutions",
+      features: [
+        "Smart Contracts",
+        "NFT Platforms",
+        "DeFi Solutions",
+        "Wallet Integration",
+      ],
+      price: "Starting at $20,000",
     },
     {
       icon: <Star className="h-8 w-8" />,
       title: "Generative AI",
       description: "AI-powered automation and content generation",
+      features: [
+        "Custom AI Models",
+        "Chatbot Development",
+        "Content Generation",
+        "ML Integration",
+      ],
+      price: "Starting at $12,000",
     },
     {
       icon: <Mail className="h-8 w-8" />,
       title: "Lead Generation",
       description: "Systems to capture and nurture prospects",
+      features: [
+        "Landing Pages",
+        "CRM Integration",
+        "Email Automation",
+        "Analytics Tracking",
+      ],
+      price: "Starting at $3,000",
     },
     {
       icon: <BarChart className="h-8 w-8" />,
       title: "Marketing Intelligence",
       description: "Data-driven insights for marketing optimization",
+      features: [
+        "Campaign Analytics",
+        "Customer Insights",
+        "ROI Tracking",
+        "Competitive Analysis",
+      ],
+      price: "Starting at $6,000",
     },
     {
       icon: <Zap className="h-8 w-8" />,
       title: "Process Automation",
       description: "Streamline workflows with intelligent automation",
+      features: [
+        "Workflow Design",
+        "API Integrations",
+        "Task Automation",
+        "Reporting Tools",
+      ],
+      price: "Starting at $4,000",
     },
   ];
 
@@ -239,7 +303,8 @@ function App() {
             {services.map((service, index) => (
               <div
                 key={index}
-                className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg hover:border-blue-300 transition-all duration-300 group"
+                className="bg-white border border-gray-200 rounded-xl p-8 hover:shadow-lg hover:border-blue-300 transition-all duration-300 group cursor-pointer"
+                onClick={() => setSelectedService(service)}
               >
                 <div className="bg-blue-50 w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-100 transition-colors">
                   <div className="text-blue-600">{service.icon}</div>
@@ -247,16 +312,16 @@ function App() {
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">
                   {service.title}
                 </h3>
-                <p className="text-gray-600 leading-relaxed">
+                <p className="text-gray-600 leading-relaxed mb-4">
                   {service.description}
                 </p>
+                <div className="text-lg font-bold text-blue-600 mb-4">
+                  {service.price}
+                </div>
                 <div className="mt-6">
-                  <a
-                    href="#contact"
-                    className="text-blue-600 font-medium hover:text-blue-700 inline-flex items-center"
-                  >
-                    Learn more <ArrowRight className="ml-1 h-4 w-4" />
-                  </a>
+                  <div className="text-blue-600 font-medium hover:text-blue-700 inline-flex items-center">
+                    View Details <ArrowRight className="ml-1 h-4 w-4" />
+                  </div>
                 </div>
               </div>
             ))}
@@ -655,6 +720,70 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Service Modal */}
+      {selectedService && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedService(null)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-8">
+              <div className="flex justify-between items-start mb-6">
+                <div className="flex items-center space-x-4">
+                  <div className="bg-blue-50 w-16 h-16 rounded-lg flex items-center justify-center">
+                    <div className="text-blue-600">{selectedService.icon}</div>
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-bold text-gray-900">
+                      {selectedService.title}
+                    </h2>
+                    <p className="text-lg text-blue-600 font-semibold">
+                      {selectedService.price}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedService(null)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <X className="h-6 w-6" />
+                </button>
+              </div>
+
+              <p className="text-lg text-gray-600 mb-8">
+                {selectedService.description}
+              </p>
+
+              <div className="mb-8">
+                <h3 className="text-xl font-semibold text-gray-900 mb-4">
+                  What's Included
+                </h3>
+                <div className="grid md:grid-cols-2 gap-3">
+                  {selectedService.features.map((feature, index) => (
+                    <div key={index} className="flex items-center space-x-3">
+                      <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0" />
+                      <span className="text-gray-700">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <button className="flex-1 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-white font-semibold transition-colors">
+                  Get Started
+                </button>
+                <button className="flex-1 border border-gray-300 hover:bg-gray-50 px-6 py-3 rounded-lg text-gray-700 font-semibold transition-colors">
+                  Schedule Consultation
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
