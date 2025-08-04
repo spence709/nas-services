@@ -143,11 +143,8 @@ function App() {
               <div className="flex items-center bg-blue-600 rounded-lg p-2">
                 <Code className="h-6 w-6 text-white" />
               </div>
-              <span className="ml-3 text-2xl font-bold text-gray-900">
-                DevStudio
-              </span>
-              <span className="ml-2 text-sm text-gray-500 font-medium">
-                Professional
+              <span className="ml-3 text-2xl font-bold text-blue-600 ">
+                Enviro<span className="text-gray-500">Cloud</span>
               </span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
@@ -352,7 +349,7 @@ function App() {
             </div>
             <div>
               <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                Why Industry Leaders Choose DevStudio
+                Why Industry Leaders Choose EnviroCloud
               </h2>
               <p className="text-lg text-gray-600 mb-8">
                 We combine technical expertise with business acumen to deliver
@@ -519,7 +516,7 @@ function App() {
                       <h4 className="text-lg font-semibold text-white mb-1">
                         Email
                       </h4>
-                      <p className="text-gray-300">hello@devstudio.com</p>
+                      <p className="text-gray-300">hello@envirocloud.com</p>
                       <p className="text-sm text-gray-400">
                         We'll respond within 24 hours
                       </p>
@@ -646,7 +643,7 @@ function App() {
                   <Code className="h-6 w-6 text-white" />
                 </div>
                 <span className="ml-3 text-2xl font-bold text-white">
-                  DevStudio
+                  EnviroCloud
                 </span>
                 <span className="ml-2 text-sm text-gray-400 font-medium">
                   Professional
@@ -658,7 +655,7 @@ function App() {
               </p>
               <div className="text-sm text-gray-400">
                 <p>
-                  © 2024 DevStudio Professional Services. All rights reserved.
+                  © 2025 EnviroCloud Professional Services. All rights reserved.
                 </p>
                 <p className="mt-1">
                   ISO 27001 Certified | SOC 2 Type II Compliant
