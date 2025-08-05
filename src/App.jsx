@@ -516,7 +516,7 @@ function App() {
                       <h4 className="text-lg font-semibold text-white mb-1">
                         Email
                       </h4>
-                      <p className="text-gray-300">hello@envirocloud.com</p>
+                      <p className="text-gray-300">contact@envirocloud.net</p>
                       <p className="text-sm text-gray-400">
                         We'll respond within 24 hours
                       </p>
