@@ -13,6 +13,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { Resend } from "resend";
+import { toast } from "react-toastify";
 import { services } from "./const";
 
 const apiKey = import.meta.env.VITE_API_KEY;
@@ -30,8 +31,28 @@ function App() {
   const [projectType, setProjectType] = useState("Custom Application");
   const [projectDetails, setProjectDetails] = useState("");
 
+  const validateForm = () => {
+    if (!firstName || !lastName || !email || !company || !projectDetails) {
+      toast.error("Please fill in all fields.");
+      return false;
+    }
+
+    // Basic email format validation
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailPattern.test(email)) {
+      toast.error("Please enter a valid email address.");
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+      return; // Stop submission if validation fails
+    }
 
     const emailData = {
       from: email,
@@ -42,10 +63,18 @@ function App() {
 
     try {
       await resend.emails.send(emailData);
-      alert("Email sent successfully!");
+      toast.success("Email sent successfully!"); // Show success toast
+
+      // Clear form fields
+      setFirstName("");
+      setLastName("");
+      setEmail("");
+      setCompany("");
+      setProjectType("Custom Application");
+      setProjectDetails("");
     } catch (error) {
       console.error("Error sending email:", error);
-      alert("Failed to send email. Please try again later.");
+      toast.error("Failed to send email. Please try again later."); // Show error toast
     }
   };
 
