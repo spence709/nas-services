@@ -16,7 +16,7 @@ import { Resend } from "resend";
 import { toast } from "react-toastify";
 import { services } from "./const";
 
-const apiKey = import.meta.env.VITE_API_KEY;
+const apiKey = import.meta.env.VITE_RESEND_API_KEY;
 
 const resend = new Resend(apiKey);
 
