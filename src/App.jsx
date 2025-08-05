@@ -2,136 +2,52 @@ import { useState } from "react";
 import {
   Code,
   Globe,
-  Database,
-  BarChart,
-  Zap,
-  Star,
   Mail,
   ArrowRight,
   Menu,
   X,
-  Users,
   Award,
   Phone,
   Shield,
   Clock,
   CheckCircle,
 } from "lucide-react";
+import { Resend } from "resend";
+import { services } from "./const";
+
+const apiKey = import.meta.env.VITE_API_KEY;
+
+const resend = new Resend(apiKey);
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedService, setSelectedService] = useState(null);
 
-  const services = [
-    {
-      icon: <Code className="h-8 w-8" />,
-      title: "Custom Apps",
-      description: "Native and web applications tailored to your needs",
-      features: [
-        "iOS & Android Apps",
-        "Cross-platform Development",
-        "API Integration",
-        "App Store Deployment",
-      ],
-      price: "Starting at $15,000",
-    },
-    {
-      icon: <Globe className="h-8 w-8" />,
-      title: "Custom Websites",
-      description: "Responsive, modern websites that convert visitors",
-      features: [
-        "Responsive Design",
-        "SEO Optimization",
-        "CMS Integration",
-        "Performance Optimization",
-      ],
-      price: "Starting at $5,000",
-    },
-    {
-      icon: <Database className="h-8 w-8" />,
-      title: "Software Platforms",
-      description: "Scalable platforms with robust architecture",
-      features: [
-        "Cloud Infrastructure",
-        "Microservices",
-        "Database Design",
-        "Auto-scaling",
-      ],
-      price: "Starting at $25,000",
-    },
-    {
-      icon: <BarChart className="h-8 w-8" />,
-      title: "Dashboards",
-      description: "Data visualization and analytics dashboards",
-      features: [
-        "Real-time Analytics",
-        "Custom Charts",
-        "Data Integration",
-        "Export Features",
-      ],
-      price: "Starting at $8,000",
-    },
-    {
-      icon: <Zap className="h-8 w-8" />,
-      title: "Web3 Integration",
-      description: "Blockchain and cryptocurrency solutions",
-      features: [
-        "Smart Contracts",
-        "NFT Platforms",
-        "DeFi Solutions",
-        "Wallet Integration",
-      ],
-      price: "Starting at $20,000",
-    },
-    {
-      icon: <Star className="h-8 w-8" />,
-      title: "Generative AI",
-      description: "AI-powered automation and content generation",
-      features: [
-        "Custom AI Models",
-        "Chatbot Development",
-        "Content Generation",
-        "ML Integration",
-      ],
-      price: "Starting at $12,000",
-    },
-    {
-      icon: <Mail className="h-8 w-8" />,
-      title: "Lead Generation",
-      description: "Systems to capture and nurture prospects",
-      features: [
-        "Landing Pages",
-        "CRM Integration",
-        "Email Automation",
-        "Analytics Tracking",
-      ],
-      price: "Starting at $3,000",
-    },
-    {
-      icon: <BarChart className="h-8 w-8" />,
-      title: "Marketing Intelligence",
-      description: "Data-driven insights for marketing optimization",
-      features: [
-        "Campaign Analytics",
-        "Customer Insights",
-        "ROI Tracking",
-        "Competitive Analysis",
-      ],
-      price: "Starting at $6,000",
-    },
-    {
-      icon: <Zap className="h-8 w-8" />,
-      title: "Process Automation",
-      description: "Streamline workflows with intelligent automation",
-      features: [
-        "Workflow Design",
-        "API Integrations",
-        "Task Automation",
-        "Reporting Tools",
-      ],
-      price: "Starting at $4,000",
-    },
-  ];
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [projectType, setProjectType] = useState("Custom Application");
+  const [projectDetails, setProjectDetails] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const emailData = {
+      from: email,
+      to: "contact@envirocloud.net",
+      subject: `Project Inquiry from ${firstName} ${lastName}`,
+      text: `Company: ${company}\nProject Type: ${projectType}\nProject Details: ${projectDetails}`,
+    };
+
+    try {
+      await resend.emails.send(emailData);
+      alert("Email sent successfully!");
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send email. Please try again later.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
@@ -178,11 +94,9 @@ function App() {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="text-gray-700"
               >
-                {isMenuOpen ? (
+                {isMenuOpen ?
                   <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
+                : <Menu className="h-6 w-6" />}
               </button>
             </div>
           </div>
@@ -557,7 +471,7 @@ function App() {
               <h3 className="text-2xl font-bold text-gray-900 mb-6">
                 Start Your Project
               </h3>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -565,6 +479,8 @@ function App() {
                     </label>
                     <input
                       type="text"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                       className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -574,6 +490,8 @@ function App() {
                     </label>
                     <input
                       type="text"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
                       className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
@@ -584,6 +502,8 @@ function App() {
                   </label>
                   <input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -593,6 +513,8 @@ function App() {
                   </label>
                   <input
                     type="text"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
@@ -600,7 +522,11 @@ function App() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Project Type
                   </label>
-                  <select className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <select
+                    value={projectType}
+                    onChange={(e) => setProjectType(e.target.value)}
+                    className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  >
                     <option>Custom Application</option>
                     <option>Website Development</option>
                     <option>Software Platform</option>
@@ -616,6 +542,8 @@ function App() {
                   </label>
                   <textarea
                     rows="4"
+                    value={projectDetails}
+                    onChange={(e) => setProjectDetails(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="Tell us about your project requirements, timeline, and budget..."
                   ></textarea>
@@ -655,7 +583,8 @@ function App() {
               </p>
               <div className="text-sm text-gray-400">
                 <p>
-                  © 2025 EnviroCloud Professional Services. All rights reserved.
+                  © 2025 EnviroCloud Professional Services. All rights
+                  reserved.
                 </p>
                 <p className="mt-1">
                   ISO 27001 Certified | SOC 2 Type II Compliant
