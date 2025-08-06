@@ -1,6 +1,15 @@
 import { BarChart, Code, Database, Globe, Mail, Star, Zap } from "lucide-react";
+import { JSX } from "react";
 
-export const services = [
+export interface ServiceProps {
+  icon: JSX.Element;
+  title: string;
+  description: string;
+  features: string[];
+  price: string;
+}
+
+export const services: ServiceProps[] = [
   {
     icon: <Code className="h-8 w-8" />,
     title: "Custom Apps",

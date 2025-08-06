@@ -15,12 +15,14 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { toast } from "react-toastify";
-import { services } from "./const";
-import sendMessage from "./sendMessage";
+import { ServiceProps, services } from "./const";
+import Image from "next/image";
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [selectedService, setSelectedService] = useState<ServiceProps | null>(
+    null
+  );
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -45,7 +47,7 @@ function App() {
     return true;
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
 
     if (!validateForm()) {
@@ -53,23 +55,32 @@ function App() {
     }
 
     try {
-      await sendMessage({
-        firstName,
-        lastName,
-        email,
-        company,
-        projectDetails,
-        projectType,
+      const response = await fetch("/api/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          company,
+          projectDetails,
+          projectType,
+        }),
       });
-      toast.success("Email sent successfully!"); // Show success toast
 
-      // Clear form fields
-      setFirstName("");
-      setLastName("");
-      setEmail("");
-      setCompany("");
-      setProjectType("Custom Application");
-      setProjectDetails("");
+      if (response.ok) {
+        toast.success("Email sent successfully!"); // Show success toast
+
+        // Clear form fields
+        setFirstName("");
+        setLastName("");
+        setEmail("");
+        setCompany("");
+        setProjectType("Custom Application");
+        setProjectDetails("");
+      }
     } catch (error) {
       console.error("Error sending email:", error);
       toast.error("Failed to send email. Please try again later."); // Show error toast
@@ -164,10 +175,12 @@ function App() {
               </div>
             </div>
             <div className="relative">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&h=600&fit=crop"
                 alt="Professional development team"
-                className="rounded-2xl shadow-2xl"
+                width={800}
+                height={600}
+                className="rounded-2xl shadow-2xl object-cover"
               />
               <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg">
                 <div className="flex items-center space-x-4">
@@ -272,10 +285,12 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div className="relative">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&h=600&fit=crop"
                 alt="Professional development team collaboration"
-                className="rounded-2xl shadow-xl"
+                width={800}
+                height={600}
+                className="rounded-2xl shadow-2xl object-cover"
               />
               <div className="absolute -top-6 -right-6 bg-white p-6 rounded-xl shadow-lg">
                 <div className="text-center">
@@ -353,14 +368,18 @@ function App() {
               Recent Success Stories
             </h2>
             <p className="text-xl text-gray-600">
-              Discover how we've helped businesses transform through technology
+              {
+                "Discover how we've helped businesses transform through technology"
+              }
             </p>
           </div>
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=250&fit=crop"
                 alt="E-commerce platform"
+                width={400}
+                height={250}
                 className="w-full h-48 object-cover"
               />
               <div className="p-6">
@@ -376,11 +395,14 @@ function App() {
               </div>
             </div>
             <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop"
                 alt="Analytics dashboard"
+                width={400}
+                height={250}
                 className="w-full h-48 object-cover"
               />
+
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   Analytics Dashboard
@@ -394,11 +416,14 @@ function App() {
               </div>
             </div>
             <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=250&fit=crop"
                 alt="Mobile application"
+                width={400}
+                height={250}
                 className="w-full h-48 object-cover"
               />
+
               <div className="p-6">
                 <h3 className="text-xl font-semibold text-gray-900 mb-2">
                   Mobile Application
@@ -420,7 +445,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-white mb-4">
-              Let's Build Something Amazing Together
+              {"Let's Build Something Amazing Together"}
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
               Ready to transform your business? Our expert team is here to turn
@@ -459,7 +484,7 @@ function App() {
                       </h4>
                       <p className="text-gray-300">contact@envirocloud.net</p>
                       <p className="text-sm text-gray-400">
-                        We'll respond within 24 hours
+                        {"We'll respond within 24 hours"}
                       </p>
                     </div>
                   </div>
@@ -568,7 +593,7 @@ function App() {
                     Project Details
                   </label>
                   <textarea
-                    rows="4"
+                    rows={4}
                     value={projectDetails}
                     onChange={(e) => setProjectDetails(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -713,7 +738,7 @@ function App() {
 
               <div className="mb-8">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">
-                  What's Included
+                  {"What's Included"}
                 </h3>
                 <div className="grid md:grid-cols-2 gap-3">
                   {selectedService.features.map((feature, index) => (
