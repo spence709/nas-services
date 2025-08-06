@@ -513,7 +513,16 @@ function App() {
                   Schedule a 30-minute strategy session to discuss your project
                   requirements and get expert recommendations.
                 </p>
-                <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors  cursor-pointer">
+                <button
+                  className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors  cursor-pointer"
+                  onClick={() =>
+                    window.open(
+                      "https://calendar.app.google/ZwVZLUTdUbKGs3KU8",
+                      "_blank",
+                      "noopener,noreferrer"
+                    )
+                  }
+                >
                   Book Free Consultation
                 </button>
               </div>
