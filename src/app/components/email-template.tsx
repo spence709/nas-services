@@ -18,52 +18,61 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
   projectDetails,
 }) => {
   return (
-    <div className="max-w-[600px] mx-auto bg-gray-100 rounded-lg shadow-md p-6 font-sans">
-      <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">
-          Project Quote Request
-        </h1>
+    <div className="max-w-[600px] mx-auto bg-white shadow-xl rounded-xl overflow-hidden font-sans">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 text-center">
+        <h1 className="text-3xl font-bold">📩 Project Quote Request</h1>
+        <p className="text-sm mt-1">New project submission from your site</p>
       </div>
-      <table className="w-full bg-white rounded-lg shadow-md">
-        <tbody>
-          <tr className="border-b border-gray-200">
-            <th className="px-4 py-3 bg-gray-100 text-left text-gray-600 font-medium">
-              First Name
-            </th>
-            <td className="px-4 py-3 text-gray-800">{firstName}</td>
-          </tr>
-          <tr className="border-b border-gray-200">
-            <th className="px-4 py-3 bg-gray-100 text-left text-gray-600 font-medium">
-              Last Name
-            </th>
-            <td className="px-4 py-3 text-gray-800">{lastName}</td>
-          </tr>
-          <tr className="border-b border-gray-200">
-            <th className="px-4 py-3 bg-gray-100 text-left text-gray-600 font-medium">
-              Business Email
-            </th>
-            <td className="px-4 py-3 text-gray-800">{email}</td>
-          </tr>
-          <tr className="border-b border-gray-200">
-            <th className="px-4 py-3 bg-gray-100 text-left text-gray-600 font-medium">
-              Company
-            </th>
-            <td className="px-4 py-3 text-gray-800">{company}</td>
-          </tr>
-          <tr className="border-b border-gray-200">
-            <th className="px-4 py-3 bg-gray-100 text-left text-gray-600 font-medium">
-              Project Type
-            </th>
-            <td className="px-4 py-3 text-gray-800">{projectType}</td>
-          </tr>
-          <tr>
-            <th className="px-4 py-3 bg-gray-100 text-left text-gray-600 font-medium">
-              Project Details
-            </th>
-            <td className="px-4 py-3 text-gray-800">{projectDetails}</td>
-          </tr>
-        </tbody>
-      </table>
+      {/* Body */}
+      <div className="p-6">
+        <table className="w-full table-auto">
+          <tbody className="divide-y divide-gray-200">
+            <tr>
+              <th className="text-left text-gray-500 font-semibold py-3 w-1/3">
+                First Name
+              </th>
+              <td className="text-gray-800 py-3">{firstName}</td>
+            </tr>
+            <tr>
+              <th className="text-left text-gray-500 font-semibold py-3">
+                Last Name
+              </th>
+              <td className="text-gray-800 py-3">{lastName}</td>
+            </tr>
+            <tr>
+              <th className="text-left text-gray-500 font-semibold py-3">
+                Business Email
+              </th>
+              <td className="text-gray-800 py-3">{email}</td>
+            </tr>
+            <tr>
+              <th className="text-left text-gray-500 font-semibold py-3">
+                Company
+              </th>
+              <td className="text-gray-800 py-3">{company}</td>
+            </tr>
+            <tr>
+              <th className="text-left text-gray-500 font-semibold py-3">
+                Project Type
+              </th>
+              <td className="text-gray-800 py-3">{projectType}</td>
+            </tr>
+            <tr>
+              <th className="text-left text-gray-500 font-semibold py-3 align-top">
+                Project Details
+              </th>
+              <td className="text-gray-800 py-3 whitespace-pre-line">
+                {projectDetails}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {/* Footer (Optional) */}
+      <div className="bg-gray-50 text-center text-sm text-gray-500 py-4">
+        You received this email via your website contact form.
+      </div>
     </div>
   );
 };
