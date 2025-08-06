@@ -460,7 +460,7 @@ function App() {
                   Get in Touch
                 </h3>
                 <div className="space-y-6">
-                  <div className="flex items-start space-x-4">
+                  {/* <div className="flex items-start space-x-4">
                     <div className="bg-blue-600 p-3 rounded-lg">
                       <Phone className="h-6 w-6 text-white" />
                     </div>
@@ -473,7 +473,7 @@ function App() {
                         Mon-Fri 9AM-6PM EST
                       </p>
                     </div>
-                  </div>
+                  </div> */}
                   <div className="flex items-start space-x-4">
                     <div className="bg-blue-600 p-3 rounded-lg">
                       <Mail className="h-6 w-6 text-white" />
@@ -550,7 +550,7 @@ function App() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Business Email
+                    Email
                   </label>
                   <input
                     type="email"

@@ -115,7 +115,7 @@ const EmailTemplate: React.FC<EmailTemplateProps> = ({
                   padding: "10px",
                 }}
               >
-                Business Email
+                Email
               </th>
               <td
                 style={{
