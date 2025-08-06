@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
   Code,
@@ -12,13 +14,9 @@ import {
   Clock,
   CheckCircle,
 } from "lucide-react";
-import { Resend } from "resend";
 import { toast } from "react-toastify";
 import { services } from "./const";
-
-const apiKey = import.meta.env.VITE_RESEND_API_KEY;
-
-const resend = new Resend(apiKey);
+import sendMessage from "./sendMessage";
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,22 +45,22 @@ function App() {
     return true;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     if (!validateForm()) {
       return; // Stop submission if validation fails
     }
 
-    const emailData = {
-      from: email,
-      to: "contact@envirocloud.net",
-      subject: `Project Inquiry from ${firstName} ${lastName}`,
-      text: `Company: ${company}\nProject Type: ${projectType}\nProject Details: ${projectDetails}`,
-    };
-
     try {
-      await resend.emails.send(emailData);
+      await sendMessage({
+        firstName,
+        lastName,
+        email,
+        company,
+        projectDetails,
+        projectType,
+      });
       toast.success("Email sent successfully!"); // Show success toast
 
       // Clear form fields
@@ -171,7 +169,7 @@ function App() {
                 alt="Professional development team"
                 className="rounded-2xl shadow-2xl"
               />
-              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg border">
+              <div className="absolute -bottom-6 -left-6 bg-white p-6 rounded-xl shadow-lg">
                 <div className="flex items-center space-x-4">
                   <div className="bg-green-100 p-3 rounded-lg">
                     <CheckCircle className="h-6 w-6 text-green-600" />
@@ -279,7 +277,7 @@ function App() {
                 alt="Professional development team collaboration"
                 className="rounded-2xl shadow-xl"
               />
-              <div className="absolute -top-6 -right-6 bg-white p-6 rounded-xl shadow-lg border">
+              <div className="absolute -top-6 -right-6 bg-white p-6 rounded-xl shadow-lg">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-blue-600">
                     ISO 27001
@@ -679,7 +677,7 @@ function App() {
       {/* Service Modal */}
       {selectedService && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
           onClick={() => setSelectedService(null)}
         >
           <div
