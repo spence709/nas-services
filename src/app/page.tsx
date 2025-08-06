@@ -130,7 +130,7 @@ function App() {
             <div className="md:hidden flex items-center">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-gray-700"
+                className="text-gray-700 cursor-pointer"
               >
                 {isMenuOpen ?
                   <X className="h-6 w-6" />
@@ -513,7 +513,7 @@ function App() {
                   Schedule a 30-minute strategy session to discuss your project
                   requirements and get expert recommendations.
                 </p>
-                <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
+                <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors  cursor-pointer">
                   Book Free Consultation
                 </button>
               </div>
@@ -600,7 +600,7 @@ function App() {
                     placeholder="Tell us about your project requirements, timeline, and budget..."
                   ></textarea>
                 </div>
-                <button className="w-full bg-blue-600 hover:bg-blue-700 px-6 py-4 rounded-lg text-white font-semibold text-lg transition-colors">
+                <button className="w-full bg-blue-600 hover:bg-blue-700 px-6 py-4 rounded-lg text-white font-semibold text-lg transition-colors  cursor-pointer">
                   Get Project Quote
                 </button>
                 <p className="text-sm text-gray-500 text-center">
@@ -726,7 +726,7 @@ function App() {
                 </div>
                 <button
                   onClick={() => setSelectedService(null)}
-                  className="text-gray-400 hover:text-gray-600"
+                  className="text-gray-400 hover:text-gray-600  cursor-pointer"
                 >
                   <X className="h-6 w-6" />
                 </button>
@@ -751,10 +751,16 @@ function App() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <button className="flex-1 bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg text-white font-semibold transition-colors">
-                  Get Started
-                </button>
-                <button className="flex-1 border border-gray-300 hover:bg-gray-50 px-6 py-3 rounded-lg text-gray-700 font-semibold transition-colors">
+                <button
+                  className="flex-1 border border-gray-300 hover:bg-gray-50 px-6 py-3 rounded-lg text-gray-700 font-semibold transition-colors cursor-pointer"
+                  onClick={() =>
+                    window.open(
+                      "https://calendar.app.google/ZwVZLUTdUbKGs3KU8",
+                      "_blank",
+                      "noopener,noreferrer"
+                    )
+                  }
+                >
                   Schedule Consultation
                 </button>
               </div>
