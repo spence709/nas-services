@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
 
     const { data, error } = await resend.emails.send({
       from: "Project Quote Request <support@envirocloud.net>",
-      to: "contact@envirocloud.net",
+      to: "nazchat101@gmail.com",
       subject: "Project Quote Request",
       react: emailTemplate as React.ReactElement,
     });
