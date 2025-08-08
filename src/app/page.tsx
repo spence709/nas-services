@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent, JSX } from "react";
 import {
   Code,
   Globe,
@@ -9,29 +9,105 @@ import {
   Menu,
   X,
   Award,
-  Phone,
   Shield,
   Clock,
   CheckCircle,
 } from "lucide-react";
 import { toast } from "react-toastify";
-import { ServiceProps, services } from "./const";
+import { services } from "@/data/index";
 import Image from "next/image";
+import { ContactFormData, ServiceProps, SuccessStory } from "@/types";
 
-function App() {
+const successStories: SuccessStory[] = [
+  {
+    id: "zintlr",
+    title: "Zintlr",
+    subtitle: "B2B Sales Intelligence Platform",
+    challenge:
+      "A growing startup needed a comprehensive B2B sales intelligence platform to compete with established players like ZoomInfo and Apollo in the crowded lead generation market.",
+    keyResults: [
+      "Built a scalable SaaS platform handling 500M+ contacts and 75M+ companies globally",
+      "Integrated advanced AI powered personality profiling (zPersonality Intel) using DISC and OCEAN frameworks",
+      "Developed proprietary Indian Data Suite with 6.5M companies and 50M decision makers",
+      "Implemented real time data accuracy validation across billions of web data points",
+      "Created seamless Chrome extension and CRM integrations for enterprise workflows",
+      "Achieved successful funding of $896K and gained 3,679+ LinkedIn followers",
+    ],
+    impact:
+      "Our custom built platform transformed Zintlr into a competitive B2B sales intelligence solution that not only matches industry giants but introduces unique psychological insights through zPersonality profiling. By combining massive data processing capabilities with AI driven personality analysis, we helped position Zintlr as an innovative disruptor in the sales intelligence space. The platform now serves large enterprises and mid market companies, providing them with the strategic knowledge to significantly improve sales conversion rates through personalized outreach strategies.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop",
+    stats: [
+      { label: "Contacts", value: "500M+" },
+      { label: "Companies", value: "75M+" },
+      { label: "Funding Raised", value: "$896K" },
+    ],
+  },
+  {
+    id: "stellaryai",
+    title: "StellaryAI",
+    subtitle: "Creative AI Platform",
+    challenge:
+      "Developing a comprehensive AI powered creative platform that democratizes content creation across multiple media types while ensuring real time performance and user friendly interfaces.",
+    keyResults: [
+      "Built a unified platform supporting AI powered image, voice, music, and video generation",
+      "Implemented advanced real time generation capabilities with upscaling and relighting features",
+      "Developed intuitive user interfaces that make complex AI tools accessible to non technical users",
+      "Created scalable architecture handling multiple AI model integrations simultaneously",
+      "Established secure user authentication and content management systems",
+      "Delivered cross platform compatibility ensuring consistent experience across devices",
+    ],
+    impact:
+      'We transformed the creative bottleneck that many face by building StellaryAI as "The Aggregator of AI Creativity," enabling users to turn raw creative ideas into professional quality content without requiring technical expertise. Our solution addresses the fundamental challenge of creative expression in the digital age by bridging the gap between inspiration and execution. The platform empowers users to create like Renaissance masters or compose symphonies, regardless of their technical background, making advanced AI creativity tools accessible to creators, businesses, and content professionals worldwide.',
+    imageUrl:
+      "https://images.unsplash.com/photo-1547658719-da2b51169166?w=400&h=250&fit=crop",
+    stats: [
+      { label: "AI Models", value: "Multi-Modal" },
+      { label: "Generation Types", value: "4+" },
+      { label: "User Experience", value: "Real-time" },
+    ],
+  },
+  {
+    id: "streamer",
+    title: "Streamer",
+    subtitle: "Community Sports Streaming Platform",
+    challenge:
+      "Creating a specialized streaming platform for Australian community sports that gives local clubs the tools to broadcast their games while building engaged fan communities.",
+    keyResults: [
+      "Developed live streaming infrastructure supporting multiple sports (AFL, hockey, surfing, volleyball)",
+      "Built self service club registration and content management system",
+      "Implemented replay functionality and community engagement features",
+      "Created user friendly streaming setup tools for non technical club administrators",
+      "Designed responsive platform supporting both live viewing and on demand content",
+      "Established scalable video delivery network optimized for Australian market",
+    ],
+    impact:
+      "We revolutionized how Australian community sports connect with their audiences by creating Streamer, a platform that puts the power directly in clubs' hands to create, share, and monetize their unique sporting content. Rather than competing with major streaming services, we identified and filled a crucial niche market where local sports communities needed professional broadcasting tools without the complexity. Our solution enables clubs to boost performance through fan engagement, build stronger community connections, and create new revenue streams through their sporting content, transforming local sports from purely offline experiences into digital community hubs.",
+    imageUrl:
+      "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=250&fit=crop",
+    stats: [
+      { label: "Sports Supported", value: "4+" },
+      { label: "Market", value: "Australia" },
+      { label: "Platform Type", value: "Live & VOD" },
+    ],
+  },
+];
+
+function App(): JSX.Element {
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const [selectedService, setSelectedService] = useState<ServiceProps | null>(
     null
   );
+  const [selectedCaseStudy, setSelectedCaseStudy] =
+    useState<SuccessStory | null>(null);
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [company, setCompany] = useState<string>("");
+  const [projectType, setProjectType] = useState<string>("Custom Application");
+  const [projectDetails, setProjectDetails] = useState<string>("");
 
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [company, setCompany] = useState("");
-  const [projectType, setProjectType] = useState("Custom Application");
-  const [projectDetails, setProjectDetails] = useState("");
-
-  const validateForm = () => {
+  const validateForm = (): boolean => {
     if (!firstName || !lastName || !email || !company || !projectDetails) {
       toast.error("Please fill in all fields.");
       return false;
@@ -47,31 +123,33 @@ function App() {
     return true;
   };
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
 
     if (!validateForm()) {
-      return; // Stop submission if validation fails
+      return;
     }
 
     try {
-      const response = await fetch("/api/send", {
+      const formData: ContactFormData = {
+        firstName,
+        lastName,
+        email,
+        company,
+        projectDetails,
+        projectType,
+      };
+
+      const response: Response = await fetch("/api/send", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          company,
-          projectDetails,
-          projectType,
-        }),
+        body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        toast.success("Email sent successfully!"); // Show success toast
+        toast.success("Email sent successfully!");
 
         // Clear form fields
         setFirstName("");
@@ -80,10 +158,12 @@ function App() {
         setCompany("");
         setProjectType("Custom Application");
         setProjectDetails("");
+      } else {
+        toast.error("Failed to send email. Please try again later.");
       }
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error sending email:", error);
-      toast.error("Failed to send email. Please try again later."); // Show error toast
+      toast.error("Failed to send email. Please try again later.");
     }
   };
 
@@ -360,7 +440,7 @@ function App() {
         </div>
       </section>
 
-      {/* Portfolio Preview */}
+      {/* Portfolio Preview - Update the button */}
       <section id="portfolio" className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -373,69 +453,80 @@ function App() {
               }
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-              <Image
-                src="https://images.unsplash.com/photo-1551434678-e076c223a692?w=400&h=250&fit=crop"
-                alt="E-commerce platform"
-                width={400}
-                height={250}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  E-commerce Platform
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Custom marketplace solution serving 100K+ users
-                </p>
-                <div className="text-blue-600 font-medium">
-                  View Case Study →
+          <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8">
+            {successStories.map((story: SuccessStory) => (
+              <div
+                key={story.id}
+                className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow group"
+              >
+                <Image
+                  src={story.imageUrl}
+                  alt={story.title}
+                  width={400}
+                  height={250}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-6">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {story.title}
+                    </h3>
+                    <div className="flex space-x-2">
+                      {story.stats.slice(0, 1).map((stat, index) => (
+                        <span
+                          key={index}
+                          className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded"
+                        >
+                          {stat.value}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-sm text-blue-600 font-medium mb-3">
+                    {story.subtitle}
+                  </p>
+                  <p className="text-gray-600 mb-4 text-sm line-clamp-3">
+                    {story.challenge}
+                  </p>
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-gray-900 mb-2">
+                      Key Results:
+                    </h4>
+                    <ul className="text-sm text-gray-600 space-y-1">
+                      {story.keyResults.slice(0, 2).map((result, index) => (
+                        <li key={index} className="flex items-start">
+                          <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 mr-2 flex-shrink-0" />
+                          <span className="line-clamp-2">{result}</span>
+                        </li>
+                      ))}
+                      {story.keyResults.length > 2 && (
+                        <li className="text-blue-600 text-xs">
+                          +{story.keyResults.length - 2} more achievements
+                        </li>
+                      )}
+                    </ul>
+                  </div>
+                  <div className="grid grid-cols-3 gap-2 mb-4">
+                    {story.stats.map((stat, index) => (
+                      <div key={index} className="text-center">
+                        <div className="text-sm font-bold text-blue-600">
+                          {stat.value}
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {stat.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    onClick={() => setSelectedCaseStudy(story)}
+                    className="w-full text-blue-600 font-medium hover:text-blue-700 text-sm border border-blue-200 hover:border-blue-300 rounded-lg py-2 transition-colors cursor-pointer hover:bg-blue-100"
+                  >
+                    View Full Case Study →
+                  </button>
                 </div>
               </div>
-            </div>
-            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-              <Image
-                src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=400&h=250&fit=crop"
-                alt="Analytics dashboard"
-                width={400}
-                height={250}
-                className="w-full h-48 object-cover"
-              />
-
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Analytics Dashboard
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Real-time data visualization for Fortune 500 client
-                </p>
-                <div className="text-blue-600 font-medium">
-                  View Case Study →
-                </div>
-              </div>
-            </div>
-            <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow">
-              <Image
-                src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=400&h=250&fit=crop"
-                alt="Mobile application"
-                width={400}
-                height={250}
-                className="w-full h-48 object-cover"
-              />
-
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  Mobile Application
-                </h3>
-                <p className="text-gray-600 mb-4">
-                  Cross-platform app with 1M+ downloads
-                </p>
-                <div className="text-blue-600 font-medium">
-                  View Case Study →
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -707,6 +798,158 @@ function App() {
           </div>
         </div>
       </footer>
+
+      {/* Case Study Modal */}
+      {selectedCaseStudy && (
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedCaseStudy(null)}
+        >
+          <div
+            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="relative">
+              {/* Header Image */}
+              <div className="h-64 overflow-hidden rounded-t-2xl">
+                <Image
+                  src={selectedCaseStudy.imageUrl}
+                  alt={selectedCaseStudy.title}
+                  width={800}
+                  height={400}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Close Button */}
+              <button
+                onClick={() => setSelectedCaseStudy(null)}
+                className="absolute top-4 right-4 bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 p-2 rounded-full transition-colors cursor-pointer"
+              >
+                <X className="h-6 w-6" />
+              </button>
+
+              {/* Content */}
+              <div className="p-8">
+                {/* Title Section */}
+                <div className="mb-8">
+                  <div className="flex items-center justify-between mb-4">
+                    <div>
+                      <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                        {selectedCaseStudy.title}
+                      </h1>
+                      <p className="text-xl text-blue-600 font-semibold">
+                        {selectedCaseStudy.subtitle}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Stats */}
+                  <div className="grid grid-cols-3 gap-4 bg-gray-50 p-6 rounded-xl">
+                    {selectedCaseStudy.stats.map((stat, index) => (
+                      <div key={index} className="text-center">
+                        <div className="text-2xl font-bold text-blue-600 mb-1">
+                          {stat.value}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {stat.label}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Challenge Section */}
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                    <div className="bg-red-100 p-2 rounded-lg mr-3">
+                      <span className="text-red-600 text-lg">🎯</span>
+                    </div>
+                    The Challenge
+                  </h2>
+                  <p className="text-lg text-gray-700 leading-relaxed">
+                    {selectedCaseStudy.challenge}
+                  </p>
+                </div>
+
+                {/* Key Results Section */}
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+                    <div className="bg-green-100 p-2 rounded-lg mr-3">
+                      <span className="text-green-600 text-lg">🚀</span>
+                    </div>
+                    Key Results Delivered
+                  </h2>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {selectedCaseStudy.keyResults.map((result, index) => (
+                      <div
+                        key={index}
+                        className="flex items-start space-x-3 p-4 bg-green-50 rounded-lg"
+                      >
+                        <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-gray-700">{result}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Impact Section */}
+                <div className="mb-8">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4 flex items-center">
+                    <div className="bg-blue-100 p-2 rounded-lg mr-3">
+                      <span className="text-blue-600 text-lg">💡</span>
+                    </div>
+                    The Impact
+                  </h2>
+                  <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border-l-4 border-blue-500">
+                    <p className="text-lg text-gray-700 leading-relaxed">
+                      {selectedCaseStudy.impact}
+                    </p>
+                  </div>
+                </div>
+
+                {/* CTA Section */}
+                <div className="bg-gray-900 rounded-xl p-8 text-center">
+                  <h3 className="text-2xl font-bold text-white mb-4">
+                    Ready to Transform Your Business?
+                  </h3>
+                  <p className="text-gray-300 mb-6">
+                    {
+                      "Let's discuss how we can help you achieve similar results for your organization."
+                    }
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                    <button
+                      onClick={() => {
+                        setSelectedCaseStudy(null);
+                        document
+                          .getElementById("contact")
+                          ?.scrollIntoView({ behavior: "smooth" });
+                      }}
+                      className="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-lg text-white font-semibold transition-colors cursor-pointer"
+                    >
+                      Start Your Project
+                    </button>
+                    <button
+                      onClick={() => {
+                        setSelectedCaseStudy(null);
+                        window.open(
+                          "https://calendar.app.google/ZwVZLUTdUbKGs3KU8",
+                          "_blank",
+                          "noopener,noreferrer"
+                        );
+                      }}
+                      className="border border-white text-white hover:bg-white hover:text-gray-900 px-8 py-3 rounded-lg font-semibold transition-colors cursor-pointer"
+                    >
+                      Schedule Consultation
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Service Modal */}
       {selectedService && (

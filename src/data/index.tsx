@@ -1,13 +1,5 @@
+import { ServiceProps } from "@/types";
 import { BarChart, Code, Database, Globe, Mail, Star, Zap } from "lucide-react";
-import { JSX } from "react";
-
-export interface ServiceProps {
-  icon: JSX.Element;
-  title: string;
-  description: string;
-  features: string[];
-  price: string;
-}
 
 export const services: ServiceProps[] = [
   {
