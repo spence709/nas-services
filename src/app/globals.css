@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+.ios-smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+}
